@@ -1,13 +1,20 @@
 import { Button, Table,Form } from "react-bootstrap"
 import Header from "../components/Header"
 import "../styles/Product.css"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from 'axios'
+import '../styles/caixa.css'
 
 export default function Caixa(){
     const [products, setProducts] = useState([])
+    const [client, setClient] = useState([])
+    const [table, setTable] = useState([])
+    const [tableClients, setTableClients] = useState([])
+    const [value, setValue] = useState(0)
+    const [productid, setProductid] = useState([])
+    const [clientid, setClientid]=  useState('')
 
-    function showForm(){
+    /*function showForm(){
         if (document.querySelector(".form").style.display == "block"){
             document.querySelector(".form").style.display = "none"
         }else{
@@ -17,9 +24,9 @@ export default function Caixa(){
             document.querySelector(".table").style.display = "none"
         }
 
-    }
+    }*/
 
-    function showTable(){
+   /* function showTable(){
         if (document.querySelector(".table").style.display == "block"){
             document.querySelector(".table").style.display = "none"
         }else{
@@ -28,7 +35,7 @@ export default function Caixa(){
         if (document.querySelector(".form").style.display == "block"){
             document.querySelector(".form").style.display = "none"
         }
-    }
+    }*/
 
 
    function search() {
@@ -47,31 +54,99 @@ if(name.length == 0){
 })
 }
 
-function itemSelected(product_key, name, cost_price,sale_price,categories,quantities){
-    console.log(product_key)
-    document.getElementById('product_key').setAttribute('value',product_key);
-    document.getElementById('name').setAttribute('value',name);
-    document.getElementById('cost_price').setAttribute('value',cost_price);
-    document.getElementById('sale_price').setAttribute('value',sale_price);
-    document.getElementById('categories').setAttribute('value',categories);
 
-    document.getElementById('quantities').setAttribute('value',quantities);
+
+function searchClient() {
+  const name = document.getElementById('search-client').value
+  console.log(name)
+  if(name.length == 0){
+      document.getElementById('search-table-client').style.display = 'none'
+  }else {
+      document.getElementById('search-table-client').style.display = 'block'
+  }
+  
+          axios.get('http://localhost:3000/clients/search/'+name)
+  .then(function (response) {
+    // handle success
+    setClient(response.data)
+    console.log(response);
+  })
+
+}
+
+function itemSelected(_id,product_key, name, cost_price,sale_price,categories,brand){
+let a = <tr>
+<td id="">{product_key}</td>
+<td id="">{name}</td>
+<td id="">{cost_price}</td>
+<td id="">{sale_price}</td>
+<td id="">{categories}</td>
+<td id="">{brand}</td>
+</tr>
+
+
+  setTable([...table, a])
+  setValue(value + sale_price)
+  setProductid([...productid, _id])
+  
     document.getElementById('search-table').style.display = 'none'
+}
+
+
+function clientSelected(_id,client_key, name, cpf,city,district,state,rg){
+
+  let a = <tr>
+  <td id="">{client_key}</td>
+  <td id="">{name}</td>
+  <td id="">{cpf}</td>
+  <td id="">{rg}</td>
+  <td id="">{city}</td>
+  <td id="">{state}</td>
+  </tr>
+  
+  
+    setTableClients([...tableClients, a])
+    setClientid(_id)
+
+
+  console.log(name)
+  /*document.getElementById('client_key').setAttribute('value',client_key);
+  document.getElementById('name-client').setAttribute('value', name);
+  document.getElementById('cpf').setAttribute('value',cpf);
+  document.getElementById('city').setAttribute('value',city);
+  document.getElementById('district').setAttribute('value',district);
+
+  document.getElementById('state').setAttribute('value',state);
+  document.getElementById('rg').setAttribute('value',rg);**/
+  document.getElementById('search-table-client').style.display = 'none'
+}
+
+function vender(){
+axios.post('http://localhost:3000/seals',{
+  product_id: productid,
+  client_id: clientid,
+  price: value
+}).then(response =>{
+  console.log(response)
+})
 }
 
     return (
         <div>
             <Header />
             
-
+<h1>Produto</h1>
 <div className=""> 
     <input id="search" onChange={search} placeholder="pesquisar"/>
     
         <div id="search-table" className=" seach-table none">
+
+
+
+
         <Table className=" table " striped bordered hover>
   <thead>
-    <tr>
-        
+    <tr> 
       <th>codigo</th>
       <th>descrição</th>
       <th>preço de custo</th>
@@ -83,12 +158,12 @@ function itemSelected(product_key, name, cost_price,sale_price,categories,quanti
   </thead>
   <tbody>
     {products.map((item) =>
-    <tr onClick={() => itemSelected(item.product_key, item.name, item.cost_price, item.sale_price, item.categories, item.quantities)}>
+    <tr onClick={() => itemSelected(item._id,item.product_key, item.name, item.cost_price, item.sale_price, item.categories, item.brand)}>
       <td >{item.product_key}</td>
       <td>{item.name}</td>
       <td>{item.cost_price}</td>
       <td>{item.sale_price}</td>
-      <td><button >teste</button></td>
+      <td></td>
       <td>{item.categories}</td>
       <th>{item.quantities}</th>
     </tr>
@@ -97,107 +172,104 @@ function itemSelected(product_key, name, cost_price,sale_price,categories,quanti
   </tbody>
 </Table>
 
-        </div>
 </div>
-<div>
-<div className="form-product ">
-                <span>codigo</span>
-                <input id="product_key" type="text"/>
-
-                <span>descrição do produto do produto</span>
-                <input id="name" type="text"/>
-
-                <span>preço de custo do produto</span>
-                <input id="cost_price" type="number"/>
-
-                <span>preço de venda do produto </span>
-                <input id="sale_price" type="number"/>
-
-                <span>qantidade do produto</span>
-                <input id="quantities" type="number"/>
-
-                <input type='text' id="categories" />
-                    
-                    
-             
-
-                <Button >cadastrar</Button>
-            </div>
 </div>
 
-            <div className="form none">
-                <span>codigo</span>
-                <input type="number"/>
-
-                <span>nome do cliente</span>
-                <input type="text"/>
-
-                <span>CPF</span>
-                <input type="number"/>
-
-                <span>RG </span>
-                <input type="numb	er"/>
-
-                <span>rua</span>
-                <input type="number"/>
-                <span>bairro</span>
-                <input type="number"/>
-                <span>cidade</span>
-                <input type="number"/>
-                <span>estado</span>
-                <input type="number"/>
-                <span>rua</span>
-                <input type="number"/>
-
-                <select>
-                    <option>categoria</option>
-                </select>
-                <select>
-                    <option>marca</option>
-                </select>
-
-                <Button>cadastrar</Button>
-            </div>
-
-
-            <Table className=" table none" striped bordered hover>
+<Table id="search-table-client none" className="search-table-client " striped bordered hover>
   <thead>
     <tr>
       <th>codigo</th>
-      <th>descrição</th>
-      <th>preço de custo</th>
-      <th>preço de venda</th>
+      <th>nome</th>
+      <th> preço de custo</th>
+      <th>preço de venda </th>
+      <th>categoria </th>
       <th>marca</th>
-      <th>categoria</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>1</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td colSpan={2}>Larry the Bird</td>
-      <td>@twitter</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
+    {table}
   </tbody>
 </Table>
 
+
+
+    <h1>Cliente</h1>
+
+<input id="search-client" onChange={() => searchClient()} placeholder="pesquisar"/>
+
+
+<Table id="search-table-client" className="search-table-client none" striped bordered hover>
+  <thead>
+    <tr>
+      <th>codigo</th>
+      <th>nome</th>
+      <th> cpf</th>
+      <th>cidade</th>
+      <th>bairro</th>
+      <th>estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    {client.map((item) => 
+    <tr key={item._id} onClick={() => clientSelected(item._id,item.client_key, item.name, item.cpf, item.city, item.district, item.state,item.rg)}>
+      <td>{item.client_key}</td>
+      <td>{item.name}</td>
+      <td>{item.cpf}</td>
+      <td>{item.city}</td>
+      <td>{item.district}</td>
+      <td>{item.state}</td>
+    </tr>)}
+    
+  </tbody>
+</Table>
+
+           
+
+
+
+
+            <Table id="search-table-client" className="search-table-client" striped bordered hover>
+  <thead>
+    <tr>
+      <th>codigo</th>
+      <th>nome</th>
+      <th> cpf</th>
+      <th>cidade</th>
+      <th>bairro</th>
+      <th>estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    
+   {tableClients}
+    
+  </tbody>
+</Table>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<button onClick={vender} className="vender">vender</button>
+<div id="value-total" className="value-total">
+  Total <br/>
+  R${value}
+</div>
+
+<div id="value-pago" className="value-pago">
+<h3></h3>valor pago <br/>
+<input type="number" />
+  
+
+</div>
+
+<br />
+<br />
+<br /><br />
+           
 
         </div>
     )

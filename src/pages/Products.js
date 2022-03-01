@@ -202,8 +202,10 @@ function registerCategory(){
 }}
 
 function registerBrand(){
+
 document.getElementById('spinner').style.display = "block"
-  const brand = document.getElementById('brand').value
+  const brand = document.getElementById('brand-register').value
+  console.log(brand)
   if(brand == ''){
     document.getElementById("alert").style.display = "block"
     document.getElementById('spinner').style.display = "none"
@@ -227,7 +229,7 @@ document.getElementById('spinner').style.display = "block"
       setTimeout(() => {
         document.getElementById("alert").style.display = "none"
       }, 3000);
-      document.getElementById('brand').value = ''
+      document.getElementById('brand-register').value = ''
     }}
     )
 }}
@@ -352,7 +354,7 @@ document.getElementById('spinner').style.display = "block"
 
 <div className="form-brand none">
   <span>marca</span>
-  <input id="brand" type="text" />
+  <input id="brand-register" type="text" />
   &nbsp; <Button onClick={registerBrand}>cadastrar</Button>
 </div>
 

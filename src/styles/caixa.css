@@ -1,0 +1,38 @@
+.value-total {
+    width: 200px;
+    height: 200px;
+    background-color: rgb(67, 67, 230);
+    float: right;
+    margin-right: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+}
+.value-pago {
+    width: 200px;
+    height: 200px;
+    background-color: rgb(67, 230, 121);
+    float: right;
+    margin-right: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    flex-direction: column;
+}
+
+ .value-pago input{
+     max-width: 150px;
+     background-color: rgb(67, 230, 121);
+     border: none;
+     outline: none;
+ }
+
+ .vender {
+     padding: 15px 30px;
+     border: none;
+     background-color: green;
+     float: right;
+     margin-right: 30px;
+ }
