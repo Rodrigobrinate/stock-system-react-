@@ -74,7 +74,7 @@ function searchClient() {
 
 }
 
-function itemSelected(_id,product_key, name, cost_price,sale_price,categories,brand){
+function itemSelected(id,product_key, name, cost_price,sale_price,categories,brand){
 let a = <tr>
 <td id="">{product_key}</td>
 <td id="">{name}</td>
@@ -87,13 +87,13 @@ let a = <tr>
 
   setTable([...table, a])
   setValue(value + sale_price)
-  setProductid([...productid, _id])
+  setProductid([...productid, id])
   
     document.getElementById('search-table').style.display = 'none'
 }
 
 
-function clientSelected(_id,client_key, name, cpf,city,district,state,rg){
+function clientSelected(id,client_key, name, cpf,city,district,state,rg){
 
   let a = <tr>
   <td id="">{client_key}</td>
@@ -106,7 +106,7 @@ function clientSelected(_id,client_key, name, cpf,city,district,state,rg){
   
   
     setTableClients([...tableClients, a])
-    setClientid(_id)
+    setClientid(id)
 
 
   console.log(name)
@@ -158,7 +158,7 @@ axios.post('http://localhost:3000/seals',{
   </thead>
   <tbody>
     {products.map((item) =>
-    <tr onClick={() => itemSelected(item._id,item.product_key, item.name, item.cost_price, item.sale_price, item.categories, item.brand)}>
+    <tr onClick={() => itemSelected(item.id,item.product_key, item.name, item.cost_price, item.sale_price, item.categories, item.brand)}>
       <td >{item.product_key}</td>
       <td>{item.name}</td>
       <td>{item.cost_price}</td>
@@ -211,7 +211,7 @@ axios.post('http://localhost:3000/seals',{
   </thead>
   <tbody>
     {client.map((item) => 
-    <tr key={item._id} onClick={() => clientSelected(item._id,item.client_key, item.name, item.cpf, item.city, item.district, item.state,item.rg)}>
+    <tr key={item.id} onClick={() => clientSelected(item.id,item.client_key, item.name, item.cpf, item.city, item.district, item.state,item.rg)}>
       <td>{item.client_key}</td>
       <td>{item.name}</td>
       <td>{item.cpf}</td>

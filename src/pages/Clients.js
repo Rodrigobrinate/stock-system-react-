@@ -69,16 +69,18 @@ function registerClient(){
   let adress = document.getElementById('address').value
   let state = document.getElementById('state').value
   let city = document.getElementById('city').value
+  let phone = document.getElementById('phone').value
   let index = state.indexOf(',')
 state = state.substring(index + 1)
 
 axios.post('http://localhost:3000/clients',{
   client_key: client_key,
   name: name,
+  phone: phone,
   cpf: cpf,
   rg:rg,
   district: district,
-  addEventListener: adress,
+  address: adress,
   state: state,
   city: city,
 }).then(response => {
@@ -137,6 +139,8 @@ console.log(response);
 
                 <span>CPF</span>
                 <input type="number" id="cpf"/>
+                <span>telefone</span>
+                <input type="number" id="phone"/>
 
                 <span>RG </span>
                 <input type="number" id="rg"/>

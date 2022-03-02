@@ -139,11 +139,11 @@ function register(){
 axios.post('http://localhost:3000/stock',{
   product_key: product_key,
   name: name,
-  brand: brand,
+  brand_id: brand,
   cost_price: cost_price,
   sale_price: sale_price,
   quantities:quantities,
-  categories: categories,
+  category_id: categories,
 }).then(response => {
   if (response.status == 201){
     document.getElementById("alert").style.display = "block"
@@ -218,7 +218,7 @@ document.getElementById('spinner').style.display = "block"
   }else{
 
   
-  axios.post('http://localhost:3000/categories',{
+  axios.post('http://localhost:3000/brand',{
     brand:brand,
   }).then(response => {
     if(response.status == 201){
@@ -281,14 +281,14 @@ document.getElementById('spinner').style.display = "block"
 
                 <select id="categories"><option value='' selected>categoria</option>
                   {categories.map((item) => 
-                  <option>{item.category}</option>
+                  <option value={item.id}>{item.category}</option>
                   )}
                     
                 </select>
                 <select id="brand">
                     <option selected value=''>marca</option>
                     {brand.map((item) => 
-                  <option >{item.brand}</option>
+                  <option value={item.id} >{item.brand}</option>
                   )}
                 </select>
 
