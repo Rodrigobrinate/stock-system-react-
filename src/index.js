@@ -12,6 +12,10 @@ import reportWebVitals from './reportWebVitals';
 import Products from './pages/Products';
 import Clients from './pages/Clients';
 import Caixa from './pages/Caixa';
+import Fornecedores from './pages/Forneçedores';
+import RelatorioProducts from './pages/relatorios/Products';
+
+
 
 ReactDOM.render(
   <BrowserRouter>
@@ -20,6 +24,8 @@ ReactDOM.render(
         <Route path="/products" element={<Products />} />
         <Route path="/clients" element={<Clients />} />
         <Route path="/caixa" element={<Caixa />} />
+        <Route path='/fornecedores' element={<Fornecedores />} />
+        <Route path='/relatorios/produtos' element={<RelatorioProducts />} />
         
       </Routes>
 </BrowserRouter>,

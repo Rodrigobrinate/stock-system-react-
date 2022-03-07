@@ -87,7 +87,11 @@ let a = <tr>
 
   setTable([...table, a])
   setValue(value + sale_price)
+  let b = [0]
+  //b.push(id)
+  console.log(...b)
   setProductid([...productid, id])
+  console.log(productid)
   
     document.getElementById('search-table').style.display = 'none'
 }
@@ -122,13 +126,18 @@ function clientSelected(id,client_key, name, cpf,city,district,state,rg){
 }
 
 function vender(){
-axios.post('http://localhost:3000/seals',{
-  product_id: productid,
-  client_id: clientid,
+  console.log(productid)
+  //productid.map((item) =>
+
+  axios.post('http://localhost:3000/seals',{
+  client: clientid,
+  stock: productid, 
   price: value
 }).then(response =>{
   console.log(response)
 })
+  //)
+
 }
 
     return (

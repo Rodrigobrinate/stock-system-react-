@@ -11,6 +11,7 @@ export default function Products(){
   const [brand, setBrand] = useState([])
   const [message, setMessage] = useState()
   const [alerttipe, setAlerttipe] =  useState()
+  const [fornecedores, setFornecedores] = useState([])
 
     function showForm(){
       
@@ -111,6 +112,16 @@ export default function Products(){
     console.log(response);
   })
         }, []);
+
+        useEffect(() => {
+          axios.get('http://localhost:3000/fornecedores')
+  .then(function (response) {
+    // handle success
+    setFornecedores(response.data)
+    console.log(response);
+  })
+        }, []);
+        
       
 function register(){
   document.getElementById('spinner').style.display = "block"
@@ -124,6 +135,8 @@ function register(){
   let quantities = document.getElementById("quantities").value
   let categories = document.getElementById("categories").value
   let brand =      document.getElementById("brand").value
+  let location =   document.getElementById("location").value
+  let fornecedores =  document.getElementById("fornecedores").value
 
   if(name == '' || product_key == '' || cost_price == '' || sale_price == '' || quantities == '' || categories == '' || brand == ''){
     document.getElementById("alert").style.display = "block"
@@ -139,11 +152,13 @@ function register(){
 axios.post('http://localhost:3000/stock',{
   product_key: product_key,
   name: name,
-  brand_id: brand,
+  brand: {id: brand},
   cost_price: cost_price,
   sale_price: sale_price,
+  location: location,
   quantities:quantities,
-  category_id: categories,
+  category: {id: categories},
+  fornecedores: { id: fornecedores },
 }).then(response => {
   if (response.status == 201){
     document.getElementById("alert").style.display = "block"
@@ -162,6 +177,9 @@ axios.post('http://localhost:3000/stock',{
     document.getElementById("quantities").value = ''
     document.getElementById("categories").value = 'categoria'
     document.getElementById("brand").value =  'marca'
+    document.getElementById("location").value = ''
+    document.getElementById("fornecedores").value = 'fornecedores'
+
 
   }
 })
@@ -270,7 +288,7 @@ document.getElementById('spinner').style.display = "block"
                 <span>descrição do produto do produto</span>
                 <input id="name" type="text"/>
 
-                <span>preço de custo do produto</span>
+                <span style={{display: 'inline-block'}}>preço de custo do produto</span>
                 <input id="cost_price" type="number"/>
 
                 <span>preço de venda do produto </span>
@@ -278,6 +296,8 @@ document.getElementById('spinner').style.display = "block"
 
                 <span>qantidade do produto</span>
                 <input id="quantities" type="number"/>
+                <span>localização do produto</span>
+                <input type="text" id="location" />
 
                 <select id="categories"><option value='' selected>categoria</option>
                   {categories.map((item) => 
@@ -289,6 +309,12 @@ document.getElementById('spinner').style.display = "block"
                     <option selected value=''>marca</option>
                     {brand.map((item) => 
                   <option value={item.id} >{item.brand}</option>
+                  )}
+                </select>
+                <select id="fornecedores">
+                    <option selected value=''>Fornecedores</option>
+                    {fornecedores.map((item) => 
+                  <option value={item.id} >{item.name}</option>
                   )}
                 </select>
 
@@ -304,17 +330,21 @@ document.getElementById('spinner').style.display = "block"
       <th>preço de venda</th>
       <th>marca</th>
       <th>categoria</th>
+      <th>localização</th>
+      <th>Fornecedor</th>
     </tr>
   </thead>
   <tbody>
     {product.map((item) => 
     <tr>
-      <td>{item.product_key}</td>
-      <td>{item.name}</td>
-      <td>{item.cost_price}</td>
-      <td>{item.sale_price}</td>
-      <td>{item.brand}</td>
-      <td>{item.categories}</td>
+      <td>{item.stock_product_key}</td>
+      <td>{item.stock_name}</td>
+    <td>{"R$ "+item.stock_cost_price.toFixed(2).toString().replace(".", ",")}</td>
+      <td>{"R$ "+item.stock_sale_price.toFixed(2).toString().replace(".", ",")}</td>
+      <td>{item.brand_brand}</td>
+      <td>{item.category_category}</td>
+      <td>{item.stock_location}</td>
+      <td>{item.fornecedores_name}</td>
     </tr>)}
    
   </tbody>

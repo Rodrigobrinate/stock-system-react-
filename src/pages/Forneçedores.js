@@ -4,11 +4,11 @@ import Header from "../components/Header"
 import "../styles/Clients.css"
 import axios from 'axios'
 
-export default function Clients(){
+export default function Fornecedores(){
   const [states, setSatates] = useState([])
   const [district, setDistrict] = useState([])
   const [message, setMessage] = useState('')
-  const [clients, setClients] = useState([])
+  const [fornecedores, setfornecedores] = useState([])
 
     function showForm(){
         if (document.querySelector(".form").style.display == "block"){
@@ -59,12 +59,13 @@ console.log(response)
 })
     }
 
-function registerClient(){
+function registerFornecedor(){
+  console.log('teste')
   document.getElementById('spinner').style.display = "block"
-  let client_key = document.getElementById('client_key').value
+  
   let name = document.getElementById('name').value 
-  let cpf = document.getElementById('cpf').value 
-  let rg = document.getElementById('rg').value
+  let cnpj = document.getElementById('cnpj').value 
+ 
   let district = document.getElementById('district').value 
   let adress = document.getElementById('address').value
   let state = document.getElementById('state').value
@@ -73,12 +74,10 @@ function registerClient(){
   let index = state.indexOf(',')
 state = state.substring(index + 1)
 
-axios.post('http://localhost:3000/clients',{
-  client_key: client_key,
+axios.post('http://localhost:3000/fornecedores',{
   name: name,
   phone: phone,
-  cpf: cpf,
-  rg:rg,
+  cnpj: cnpj,
   district: district,
   address: adress,
   state: state,
@@ -100,10 +99,10 @@ axios.post('http://localhost:3000/clients',{
 
 
 useEffect(() => {
-  axios.get('http://localhost:3000/clients')
+  axios.get('http://localhost:3000/fornecedores')
 .then(function (response) {
 // handle success
-setClients(response.data)
+setfornecedores(response.data)
 console.log(response);
 })
 }, []);
@@ -114,8 +113,8 @@ console.log(response);
             <Header />
             <div className="menu">
 
-            <Button onClick={showForm}>cadastrar clientes</Button>
-            <Button onClick={showTable}>listar clientes</Button>
+            <Button onClick={showForm}>cadastrar fornecedores</Button>
+            <Button onClick={showTable}>listar fornecedores</Button>
 
             
 
@@ -131,19 +130,17 @@ console.log(response);
     />
     <div id="alert" className="alert none">{message}</div>
             <div className="form none">
-                <span>codigo</span>
-                <input type="number" id="client_key"/>
-
-                <span>nome do cliente</span>
+                
+                <span>nome do fornecedor</span>
                 <input type="text" id="name"/>
 
-                <span>CPF</span>
-                <input type="number" id="cpf"/>
+                <span>cnpj</span>
+                <input type="number" id="cnpj"/>
+
                 <span>telefone</span>
                 <input type="number" id="phone"/>
 
-                <span>RG </span>
-                <input type="number" id="rg"/>
+                
                 <span>bairro</span>
                 <input type="text" id="district"/>
                 <span>endereço</span>
@@ -163,36 +160,29 @@ console.log(response);
                     
                 </select>
 
-                <Button className="register" onClick={registerClient}>cadastrar</Button>
+                <Button className="register" onClick={registerFornecedor}>cadastrar</Button>
             </div>
 
 
             <Table className=" table none" striped bordered hover>
   <thead>
     <tr>
-      <th>Codigo</th>
+
       <th>Nome</th>
       <th>Telefone</th>
-      <th>CPF</th>
-      <th>RG</th>
+      <th>cnpj</th>
+
       <th>Endereço</th>
       <th>Cidade</th>
     </tr>
   </thead>
   <tbody>
-    {clients.map((item)=> 
+    {fornecedores.map((item)=> 
      <tr>
-      <td>{item.client_key}</td>
       <td>{item.name}</td>
       <td>{item.phone}</td>
-      <td>{item.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, 
- function( regex, argumento1, argumento2, argumento3, argumento4 ) {
-        return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
-})}</td>
-      <td>{item.rg.replace(/(\d{2})(\d{3})(\d{3})/, 
- function( regex, argumento1, argumento2, argumento3,  ) {
-        return argumento1 + '.' + argumento2 + '.' + argumento3;
-})  }</td>
+      <td>{item.cnpj}</td>
+
       <td>{item.district}</td>
       <td>{item.city}</td>
     </tr>
